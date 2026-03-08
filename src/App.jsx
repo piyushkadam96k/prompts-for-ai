@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Github, Sparkles, Moon, Sun, Zap, Star, ArrowLeftRight, Search, BookOpen, User } from 'lucide-react';
 import { AnimatePresence, motion as Motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion';
-import { ReactLenis } from 'lenis/react';
 import promptsData from './prompts.json';
 import './index.css';
-import Background3D from './Background3D';
 import HeroSection from './components/HeroSection';
 import ToolsGrid from './components/ToolsGrid';
 import ToolDetailView from './components/ToolDetailView';
@@ -52,7 +50,7 @@ function App() {
   });
 
   useEffect(() => {
-    document.body.className = theme === 'neon' ? '' : `theme-${theme}`;
+    document.body.className = theme === 'neon' ? 'theme-neon' : `theme-${theme}`;
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
 
@@ -170,347 +168,345 @@ function App() {
   });
 
   return (
-    <ReactLenis root>
-      <div className={`min-h-screen selection:bg-neon-purple/30 pb-24 ${theme === 'light' ? 'text-gray-900' : ''}`} style={{ fontFamily: 'var(--font-sans)' }}>
-        <Background3D theme={theme} />
+    <div className={`min-h-screen selection:bg-neon-purple/30 pb-24 ${theme === 'light' ? 'text-gray-900' : ''}`} style={{ fontFamily: 'var(--font-sans)' }}>
+      {/* Background is now handled via CSS gradients in index.css */}
 
-        <Motion.div
-          className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink"
-          style={{ scaleX: motionEnabled ? progressScaleX : 0 }}
-        />
+      <Motion.div
+        className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink"
+        style={{ scaleX: motionEnabled ? progressScaleX : 0 }}
+      />
 
-        <header
-          className={`sticky top-0 z-50 transition-all duration-500 ${theme === 'light' ? 'border-b backdrop-blur-xl' : 'glass-panel border-dark-border border-b backdrop-blur-xl'}`}
-          style={theme === 'light' ? { backgroundColor: 'rgba(255, 255, 255, 0.92)', borderColor: '#e8e4dc' } : undefined}
-        >
-          <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-500 ${isCompactHeader ? 'py-2' : 'py-3.5'}`}>
-            <div className="flex items-center justify-between gap-4">
-              <button
-                onClick={() => navigate('home')}
-                className="group/logo flex items-center space-x-3 flex-shrink-0 transition-transform duration-200 hover:scale-[1.02]"
-                aria-label="Go to home"
-              >
-                <div className={`rounded-xl bg-gradient-to-br from-neon-blue via-neon-purple to-neon-pink p-[1.5px] transition-all duration-500 ${isCompactHeader ? 'w-8 h-8' : 'w-9 h-9'}`}>
-                  <div className={`w-full h-full rounded-xl flex items-center justify-center group-hover/logo:scale-110 transition-transform duration-300 ${theme === 'light' ? 'bg-white' : 'bg-dark-bg'}`}>
-                    <Sparkles className={`text-neon-blue transition-all duration-500 ${isCompactHeader ? 'w-3.5 h-3.5' : 'w-4 h-4'}`} />
-                  </div>
+      <header
+        className={`sticky top-0 z-50 transition-all duration-500 ${theme === 'light' ? 'border-b backdrop-blur-xl' : 'glass-panel border-dark-border border-b backdrop-blur-xl'}`}
+        style={theme === 'light' ? { backgroundColor: 'rgba(255, 255, 255, 0.92)', borderColor: '#e8e4dc' } : undefined}
+      >
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-500 ${isCompactHeader ? 'py-2' : 'py-3.5'}`}>
+          <div className="flex items-center justify-between gap-4">
+            <button
+              onClick={() => navigate('home')}
+              className="group/logo flex items-center space-x-3 flex-shrink-0 transition-transform duration-200 hover:scale-[1.02]"
+              aria-label="Go to home"
+            >
+              <div className={`rounded-xl bg-gradient-to-br from-neon-blue via-neon-purple to-neon-pink p-[1.5px] transition-all duration-500 ${isCompactHeader ? 'w-8 h-8' : 'w-9 h-9'}`}>
+                <div className={`w-full h-full rounded-xl flex items-center justify-center group-hover/logo:scale-110 transition-transform duration-300 ${theme === 'light' ? 'bg-white' : 'bg-dark-bg'}`}>
+                  <Sparkles className={`text-neon-blue transition-all duration-500 ${isCompactHeader ? 'w-3.5 h-3.5' : 'w-4 h-4'}`} />
                 </div>
-                <div className="flex flex-col leading-none">
-                  <span className={`font-black tracking-tight transition-all duration-500 ${theme === 'light' ? 'text-slate-900' : 'text-white'} ${isCompactHeader ? 'text-sm' : 'text-base'}`} style={{ fontFamily: 'var(--font-display)' }}>
-                    Prompt<span className="text-gradient">Archive</span>
-                  </span>
-                  {!isCompactHeader && (
-                    <span className={`text-[10px] font-semibold ${theme === 'light' ? 'text-slate-500' : 'text-gray-500'}`}>
-                      AI System Prompts
-                    </span>
-                  )}
-                </div>
-              </button>
-
-              {(view === 'search' || view === 'home') && (
-                <div className={`flex flex-1 max-w-sm items-center rounded-xl border gap-2 transition-all duration-500 input-focus-ring ${isCompactHeader ? 'px-2.5 py-1.5' : 'px-3 py-2'} ${theme === 'light' ? 'bg-white border-gray-200 shadow-sm' : 'glass-panel border-dark-border'} ${searchQuery ? 'flex' : 'hidden md:flex'}`}>
-                  <Search size={14} className={theme === 'light' ? 'text-gray-400 flex-shrink-0' : 'text-neon-blue flex-shrink-0'} />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    placeholder="Search..."
-                    aria-label="Search AI prompts"
-                    className={`flex-1 bg-transparent text-sm focus:outline-none min-w-0 ${theme === 'light' ? 'text-gray-900 placeholder-gray-400' : 'text-white placeholder-gray-500'}`}
-                  />
-                  {searchQuery && (
-                    <button
-                      type="button"
-                      aria-label="Clear search"
-                      onClick={() => handleSearch('')}
-                      className="text-gray-400 hover:text-gray-600 flex-shrink-0 text-lg leading-none px-1"
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {!searchQuery && (view === 'search' || view === 'home') && (
-                <button
-                  onClick={() => {
-                    navigate('search');
-                    setTimeout(() => searchInputRef.current?.focus(), 100);
-                  }}
-                  className="md:hidden p-2 rounded-full glass-panel border-dark-border text-neon-blue"
-                  aria-label="Toggle search"
-                >
-                  <Search size={18} />
-                </button>
-              )}
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleOpenGuide}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all btn-tap ${view === 'guide'
-                    ? 'bg-neon-blue/20 text-neon-blue border border-neon-blue/40'
-                    : theme === 'light'
-                      ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
-                      : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
-                    }`}
-                >
-                  <BookOpen size={12} />
-                  <span className="hidden sm:inline">How to Use</span>
-                </button>
-                <button
-                  onClick={handleOpenAbout}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all btn-tap ${view === 'about'
-                    ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/40'
-                    : theme === 'light'
-                      ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
-                      : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
-                    }`}
-                >
-                  <User size={12} />
-                  <span className="hidden sm:inline">About</span>
-                </button>
-                <button
-                  onClick={handleOpenCompare}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 btn-tap ${compareTools.length > 0
-                    ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/40 hover:bg-neon-purple/30 hover:scale-105'
-                    : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
-                    }`}
-                >
-                  <ArrowLeftRight size={12} />
-                  {compareTools.length > 0 ? `Compare (${compareTools.length})` : 'Compare'}
-                </button>
-
-                <div className={`hidden sm:flex items-center p-0.5 rounded-full ${theme === 'light' ? 'bg-gray-100' : 'bg-dark-bg/50 border border-dark-border'}`}>
-                  <button
-                    onClick={() => setTheme('light')}
-                    className={`p-2 rounded-full transition-all hover:scale-110 btn-tap ${theme === 'light' ? 'bg-white shadow-sm text-yellow-500' : 'text-gray-500 hover:text-gray-300'}`}
-                    title="Light Mode"
-                    aria-label="Switch to light mode"
-                  >
-                    <Sun size={14} aria-hidden="true" />
-                  </button>
-                  <button
-                    onClick={() => setTheme('neon')}
-                    className={`p-2 rounded-full transition-all hover:scale-110 btn-tap ${theme === 'neon' ? 'bg-neon-purple/20 text-neon-purple' : 'text-gray-500 hover:text-gray-300'}`}
-                    title="Neon Mode"
-                    aria-label="Switch to neon mode"
-                  >
-                    <Zap size={14} aria-hidden="true" />
-                  </button>
-                  <button
-                    onClick={() => setTheme('dark')}
-                    className={`p-2 rounded-full transition-all hover:scale-110 btn-tap ${theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-500 hover:text-gray-300'}`}
-                    title="Dark Mode"
-                    aria-label="Switch to dark mode"
-                  >
-                    <Moon size={14} aria-hidden="true" />
-                  </button>
-                </div>
-
-                <a
-                  href="https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`group flex items-center gap-2 transition-all rounded-full px-4 py-2 hover:scale-[1.02] btn-tap ${theme === 'light' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'glass-panel text-gray-400 hover:text-white hover:border-neon-purple/50'}`}
-                >
-                  <Github size={16} className="group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300" />
-                  <span className="text-xs font-bold hidden sm:block">GitHub</span>
-                  {githubStars !== null && (
-                    <span className="flex items-center gap-1 pl-2 border-l border-gray-600 text-xs">
-                      <Star size={11} className="text-yellow-400" />
-                      <span className="font-bold text-yellow-500">{githubStars.toLocaleString()}</span>
-                    </span>
-                  )}
-                </a>
               </div>
-            </div>
-          </div>
-        </header>
+              <div className="flex flex-col leading-none">
+                <span className={`font-black tracking-tight transition-all duration-500 ${theme === 'light' ? 'text-slate-900' : 'text-white'} ${isCompactHeader ? 'text-sm' : 'text-base'}`} style={{ fontFamily: 'var(--font-display)' }}>
+                  Prompt<span className="text-gradient">Archive</span>
+                </span>
+                {!isCompactHeader && (
+                  <span className={`text-[10px] font-semibold ${theme === 'light' ? 'text-slate-500' : 'text-gray-500'}`}>
+                    AI System Prompts
+                  </span>
+                )}
+              </div>
+            </button>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <AnimatePresence mode="wait" custom={transitionDirection}>
-            {view === 'home' && (
-              <Motion.div
-                key="home"
-                custom={transitionDirection}
-                variants={viewMotion}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                <HeroSection
-                  totalPrompts={stats.totalPrompts}
-                  totalTools={stats.totalTools}
-                  totalChars={stats.totalChars}
-                  onSearch={handleSearch}
-                  theme={theme}
+            {(view === 'search' || view === 'home') && (
+              <div className={`flex flex-1 max-w-sm items-center rounded-xl border gap-2 transition-all duration-500 input-focus-ring ${isCompactHeader ? 'px-2.5 py-1.5' : 'px-3 py-2'} ${theme === 'light' ? 'bg-white border-gray-200 shadow-sm' : 'glass-panel border-dark-border'} ${searchQuery ? 'flex' : 'hidden md:flex'}`}>
+                <Search size={14} className={theme === 'light' ? 'text-gray-400 flex-shrink-0' : 'text-neon-blue flex-shrink-0'} />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Search..."
+                  aria-label="Search AI prompts"
+                  className={`flex-1 bg-transparent text-sm focus:outline-none min-w-0 ${theme === 'light' ? 'text-gray-900 placeholder-gray-400' : 'text-white placeholder-gray-500'}`}
                 />
-
-                <Motion.section
-                  initial={motionEnabled ? { opacity: 0, x: 32 } : false}
-                  whileInView={motionEnabled ? { opacity: 1, x: 0 } : undefined}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: MOTION_DURATION.base, ease: MOTION_EASE_OUT }}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h2 className={`text-2xl font-black ${theme === 'light' ? 'text-gray-900' : 'text-white'}`} style={{ fontFamily: 'var(--font-display)' }}>
-                      AI Tool Explorer
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={handleOpenCompare}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold hover:scale-[1.02] transition-all btn-tap ${compareTools.length > 0
-                        ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/40 hover:bg-neon-purple/30'
-                        : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
-                        }`}
-                    >
-                      <ArrowLeftRight size={16} />
-                      {compareTools.length === 2 ? 'Open Comparison' : compareTools.length === 1 ? `Compare (1)` : 'Compare Prompts'}
-                    </button>
-                  </div>
-
-                  <ToolsGrid
-                    allPrompts={promptsData}
-                    onViewPrompts={handleViewTool}
-                    onCompare={handleCompare}
-                    compareTools={compareTools}
-                    theme={theme}
-                  />
-                </Motion.section>
-              </Motion.div>
+                {searchQuery && (
+                  <button
+                    type="button"
+                    aria-label="Clear search"
+                    onClick={() => handleSearch('')}
+                    className="text-gray-400 hover:text-gray-600 flex-shrink-0 text-lg leading-none px-1"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             )}
 
-            {view === 'toolDetail' && selectedTool && (
-              <Motion.div
-                key="toolDetail"
-                custom={transitionDirection}
-                variants={viewMotion}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="pt-8"
+            {!searchQuery && (view === 'search' || view === 'home') && (
+              <button
+                onClick={() => {
+                  navigate('search');
+                  setTimeout(() => searchInputRef.current?.focus(), 100);
+                }}
+                className="md:hidden p-2 rounded-full glass-panel border-dark-border text-neon-blue"
+                aria-label="Toggle search"
               >
-                <ToolDetailView
-                  tool={selectedTool}
+                <Search size={18} />
+              </button>
+            )}
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleOpenGuide}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all btn-tap ${view === 'guide'
+                  ? 'bg-neon-blue/20 text-neon-blue border border-neon-blue/40'
+                  : theme === 'light'
+                    ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                    : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
+                  }`}
+              >
+                <BookOpen size={12} />
+                <span className="hidden sm:inline">How to Use</span>
+              </button>
+              <button
+                onClick={handleOpenAbout}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all btn-tap ${view === 'about'
+                  ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/40'
+                  : theme === 'light'
+                    ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                    : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
+                  }`}
+              >
+                <User size={12} />
+                <span className="hidden sm:inline">About</span>
+              </button>
+              <button
+                onClick={handleOpenCompare}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 btn-tap ${compareTools.length > 0
+                  ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/40 hover:bg-neon-purple/30 hover:scale-105'
+                  : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
+                  }`}
+              >
+                <ArrowLeftRight size={12} />
+                {compareTools.length > 0 ? `Compare (${compareTools.length})` : 'Compare'}
+              </button>
+
+              <div className={`hidden sm:flex items-center p-0.5 rounded-full ${theme === 'light' ? 'bg-gray-100' : 'bg-dark-bg/50 border border-dark-border'}`}>
+                <button
+                  onClick={() => setTheme('light')}
+                  className={`p-2 rounded-full transition-all hover:scale-110 btn-tap ${theme === 'light' ? 'bg-white shadow-sm text-yellow-500' : 'text-gray-500 hover:text-gray-300'}`}
+                  title="Light Mode"
+                  aria-label="Switch to light mode"
+                >
+                  <Sun size={14} aria-hidden="true" />
+                </button>
+                <button
+                  onClick={() => setTheme('neon')}
+                  className={`p-2 rounded-full transition-all hover:scale-110 btn-tap ${theme === 'neon' ? 'bg-neon-purple/20 text-neon-purple' : 'text-gray-500 hover:text-gray-300'}`}
+                  title="Neon Mode"
+                  aria-label="Switch to neon mode"
+                >
+                  <Zap size={14} aria-hidden="true" />
+                </button>
+                <button
+                  onClick={() => setTheme('dark')}
+                  className={`p-2 rounded-full transition-all hover:scale-110 btn-tap ${theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                  title="Dark Mode"
+                  aria-label="Switch to dark mode"
+                >
+                  <Moon size={14} aria-hidden="true" />
+                </button>
+              </div>
+
+              <a
+                href="https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group flex items-center gap-2 transition-all rounded-full px-4 py-2 hover:scale-[1.02] btn-tap ${theme === 'light' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'glass-panel text-gray-400 hover:text-white hover:border-neon-purple/50'}`}
+              >
+                <Github size={16} className="group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300" />
+                <span className="text-xs font-bold hidden sm:block">GitHub</span>
+                {githubStars !== null && (
+                  <span className="flex items-center gap-1 pl-2 border-l border-gray-600 text-xs">
+                    <Star size={11} className="text-yellow-400" />
+                    <span className="font-bold text-yellow-500">{githubStars.toLocaleString()}</span>
+                  </span>
+                )}
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <AnimatePresence mode="wait" custom={transitionDirection}>
+          {view === 'home' && (
+            <Motion.div
+              key="home"
+              custom={transitionDirection}
+              variants={viewMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <HeroSection
+                totalPrompts={stats.totalPrompts}
+                totalTools={stats.totalTools}
+                totalChars={stats.totalChars}
+                onSearch={handleSearch}
+                theme={theme}
+              />
+
+              <Motion.section
+                initial={motionEnabled ? { opacity: 0, x: 32 } : false}
+                whileInView={motionEnabled ? { opacity: 1, x: 0 } : undefined}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: MOTION_DURATION.base, ease: MOTION_EASE_OUT }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className={`text-2xl font-black ${theme === 'light' ? 'text-gray-900' : 'text-white'}`} style={{ fontFamily: 'var(--font-display)' }}>
+                    AI Tool Explorer
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={handleOpenCompare}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold hover:scale-[1.02] transition-all btn-tap ${compareTools.length > 0
+                      ? 'bg-neon-purple/20 text-neon-purple border border-neon-purple/40 hover:bg-neon-purple/30'
+                      : 'bg-gray-500/20 text-gray-400 border border-gray-500/40 hover:bg-gray-500/30 hover:text-gray-300'
+                      }`}
+                  >
+                    <ArrowLeftRight size={16} />
+                    {compareTools.length === 2 ? 'Open Comparison' : compareTools.length === 1 ? `Compare (1)` : 'Compare Prompts'}
+                  </button>
+                </div>
+
+                <ToolsGrid
                   allPrompts={promptsData}
-                  onViewPrompt={handleViewPrompt}
-                  onBack={handleBack}
+                  onViewPrompts={handleViewTool}
                   onCompare={handleCompare}
                   compareTools={compareTools}
                   theme={theme}
-                  isFavorite={isFavorite}
-                  onToggleFavorite={toggleFavorite}
                 />
-              </Motion.div>
-            )}
+              </Motion.section>
+            </Motion.div>
+          )}
 
-            {view === 'promptDetail' && selectedPrompt && (
-              <Motion.div
-                key="promptDetail"
-                custom={transitionDirection}
-                variants={viewMotion}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="pt-8"
-              >
-                <PromptDetail
-                  prompt={selectedPrompt}
-                  tool={selectedTool}
-                  prevView={prevView}
-                  onBack={handleBack}
-                  theme={theme}
-                  isFavorite={isFavorite}
-                  onToggleFavorite={toggleFavorite}
-                />
-              </Motion.div>
-            )}
+          {view === 'toolDetail' && selectedTool && (
+            <Motion.div
+              key="toolDetail"
+              custom={transitionDirection}
+              variants={viewMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="pt-8"
+            >
+              <ToolDetailView
+                tool={selectedTool}
+                allPrompts={promptsData}
+                onViewPrompt={handleViewPrompt}
+                onBack={handleBack}
+                onCompare={handleCompare}
+                compareTools={compareTools}
+                theme={theme}
+                isFavorite={isFavorite}
+                onToggleFavorite={toggleFavorite}
+              />
+            </Motion.div>
+          )}
 
-            {view === 'compare' && (
-              <Motion.div
-                key="compare"
-                custom={transitionDirection}
-                variants={viewMotion}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="pt-8"
-              >
-                <CompareView
-                  allPrompts={promptsData}
-                  initialTools={compareTools}
-                  onBack={handleBack}
-                  onClose={() => { setView('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  theme={theme}
-                />
-              </Motion.div>
-            )}
+          {view === 'promptDetail' && selectedPrompt && (
+            <Motion.div
+              key="promptDetail"
+              custom={transitionDirection}
+              variants={viewMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="pt-8"
+            >
+              <PromptDetail
+                prompt={selectedPrompt}
+                tool={selectedTool}
+                prevView={prevView}
+                onBack={handleBack}
+                theme={theme}
+                isFavorite={isFavorite}
+                onToggleFavorite={toggleFavorite}
+              />
+            </Motion.div>
+          )}
 
-            {view === 'search' && (
-              <Motion.div
-                key="search"
-                custom={transitionDirection}
-                variants={viewMotion}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="pt-8"
-              >
-                <SearchView
-                  query={searchQuery}
-                  allPrompts={promptsData}
-                  onViewPrompt={handleViewPrompt}
-                  onBack={handleBack}
-                  theme={theme}
-                />
-              </Motion.div>
-            )}
+          {view === 'compare' && (
+            <Motion.div
+              key="compare"
+              custom={transitionDirection}
+              variants={viewMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="pt-8"
+            >
+              <CompareView
+                allPrompts={promptsData}
+                initialTools={compareTools}
+                onBack={handleBack}
+                onClose={() => { setView('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                theme={theme}
+              />
+            </Motion.div>
+          )}
 
-            {view === 'guide' && (
-              <Motion.div
-                key="guide"
-                custom={transitionDirection}
-                variants={viewMotion}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="pt-8"
-              >
-                <HowToUseGuide
-                  onBack={handleBack}
-                  theme={theme}
-                />
-              </Motion.div>
-            )}
+          {view === 'search' && (
+            <Motion.div
+              key="search"
+              custom={transitionDirection}
+              variants={viewMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="pt-8"
+            >
+              <SearchView
+                query={searchQuery}
+                allPrompts={promptsData}
+                onViewPrompt={handleViewPrompt}
+                onBack={handleBack}
+                theme={theme}
+              />
+            </Motion.div>
+          )}
 
-            {view === 'about' && (
-              <Motion.div
-                key="about"
-                custom={transitionDirection}
-                variants={viewMotion}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="pt-8"
-              >
-                <AboutPage
-                  onBack={handleBack}
-                  theme={theme}
-                />
-              </Motion.div>
-            )}
-          </AnimatePresence>
-        </main>
+          {view === 'guide' && (
+            <Motion.div
+              key="guide"
+              custom={transitionDirection}
+              variants={viewMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="pt-8"
+            >
+              <HowToUseGuide
+                onBack={handleBack}
+                theme={theme}
+              />
+            </Motion.div>
+          )}
 
-        <Footer
-          theme={theme}
-          githubStars={githubStars}
-          totalPrompts={stats.totalPrompts}
-          totalTools={stats.totalTools}
-        />
-      </div>
-    </ReactLenis>
+          {view === 'about' && (
+            <Motion.div
+              key="about"
+              custom={transitionDirection}
+              variants={viewMotion}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="pt-8"
+            >
+              <AboutPage
+                onBack={handleBack}
+                theme={theme}
+              />
+            </Motion.div>
+          )}
+        </AnimatePresence>
+      </main>
+
+      <Footer
+        theme={theme}
+        githubStars={githubStars}
+        totalPrompts={stats.totalPrompts}
+        totalTools={stats.totalTools}
+      />
+    </div>
   );
 }
 
