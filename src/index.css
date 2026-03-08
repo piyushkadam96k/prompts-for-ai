@@ -1,0 +1,493 @@
+@import "tailwindcss";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/orbitron/700.css";
+@import "@fontsource/orbitron/900.css";
+@import "@fontsource/jetbrains-mono/400.css";
+
+@theme {
+  --color-neon-blue: var(--color-primary);
+  --color-neon-purple: var(--color-secondary);
+  --color-neon-pink: var(--color-accent);
+
+  --color-dark-bg: var(--color-bg);
+  --color-dark-surface: var(--color-surface);
+  --color-dark-border: var(--color-border);
+
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Orbitron', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+}
+
+:root {
+  /* Tech palette - IDE/terminal inspired */
+  --color-primary: #38bdf8;
+  --color-secondary: #818cf8;
+  --color-accent: #2dd4bf;
+  --color-bg: #030305;
+  --color-surface: #0a0a0f;
+  --color-border: #1a1a24;
+  --color-text: #e2e8f0;
+  --glass-bg: rgba(10, 10, 15, 0.65);
+  --color-muted: #64748b;
+}
+
+.theme-light {
+  --color-primary: #b8860b;
+  --color-secondary: #8b6914;
+  --color-accent: #c9a227;
+  --color-bg: #f5f4f2;
+  --color-surface: #ffffff;
+  --color-border: #e8e4dc;
+  --color-text: #1a1612;
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --color-muted: #6b5b4f;
+}
+
+.theme-dark {
+  --color-primary: #6366f1;
+  --color-secondary: #8b5cf6;
+  --color-accent: #ec4899;
+  --color-bg: #0c0f1a;
+  --color-surface: #151923;
+  --color-border: #2d3344;
+  --color-text: #f1f5f9;
+  --glass-bg: rgba(21, 25, 35, 0.75);
+  --color-muted: #94a3b8;
+}
+
+/* ── Base ──────────────────────────────────────────── */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  background-image:
+    radial-gradient(circle at 15% 50%, color-mix(in srgb, var(--color-secondary) 8%, transparent), transparent 25%),
+    radial-gradient(circle at 85% 30%, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 25%);
+  background-attachment: fixed;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse 90% 60% at 50% 50%,
+    color-mix(in srgb, var(--color-primary) 5%, transparent),
+    transparent 50%
+  );
+  animation: bg-shimmer 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bg-shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Light mode: warm pearl body */
+body.theme-light {
+  background-image:
+    radial-gradient(ellipse at 15% 30%, rgba(184, 134, 11, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 70%, rgba(201, 162, 39, 0.06) 0%, transparent 50%);
+}
+
+body.theme-light::before {
+  animation: none;
+  opacity: 0.25;
+}
+
+/* Dark mode: slate body */
+body.theme-dark {
+  background-image:
+    radial-gradient(ellipse at 20% 40%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 45%);
+}
+
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* ── Glass panel ───────────────────────────────────── */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.theme-light .glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 16px rgba(26, 22, 18, 0.06), 0 1px 3px rgba(184, 134, 11, 0.06);
+}
+
+/* ── Text gradient ─────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-neon-blue), var(--color-neon-purple), var(--color-neon-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% auto;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* ── Glow border ───────────────────────────────────── */
+.glow-border {
+  position: relative;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, var(--color-neon-blue), transparent 40%, transparent 60%, var(--color-neon-purple));
+  z-index: -1;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.glow-border:hover::before {
+  opacity: 1;
+}
+
+/* ── Tool icon ring hover ──────────────────────────── */
+.tool-icon-ring:hover {
+  box-shadow: 0 0 28px color-mix(in srgb, currentColor 60%, transparent), 0 0 60px color-mix(in srgb, currentColor 20%, transparent) !important;
+}
+
+/* ── Glow Shadows ──────────────────────────────────── */
+.shadow-neon-glow {
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.shadow-purple-glow {
+  box-shadow: 0 0 15px color-mix(in srgb, var(--color-secondary) 20%, transparent);
+}
+
+.shadow-hero-glow {
+  box-shadow: 0 0 40px color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+/* ── Category tabs scrollbar hide ─────────────────── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Line clamp utilities ──────────────────────────── */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Markdown body ──────────────────────────────────── */
+.markdown-body pre {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.markdown-body code {
+  font-family: var(--font-mono);
+}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes glow-pulse-once {
+  0% {
+    box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+  }
+
+  45% {
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.28), 0 0 40px rgba(129, 140, 248, 0.18);
+  }
+
+  100% {
+    box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+  }
+}
+
+.glow-pulse-once {
+  animation: glow-pulse-once 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1;
+}
+
+@keyframes code-line-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.code-line-reveal {
+  opacity: 0;
+  animation-name: code-line-reveal;
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+}
+
+/* ── Button tap / press animation ──────────────────── */
+@keyframes tap-scale {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+.btn-tap:active {
+  animation: tap-scale 0.2s ease-out;
+}
+
+/* ── Fade-in-up for sections ───────────────────────── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Subtle hover lift ────────────────────────────── */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Hover scale ──────────────────────────────────── */
+.hover-scale {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale-sm:hover {
+  transform: scale(1.03);
+}
+
+/* ── Icon bounce on hover ─────────────────────────── */
+.hover-icon-bounce:hover svg,
+.hover-icon-bounce:hover .icon-wrapper {
+  animation: icon-bounce 0.5s ease;
+}
+
+@keyframes icon-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* ── Link underline slide ─────────────────────────── */
+.hover-underline {
+  position: relative;
+}
+
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* ── Shine sweep on hover ─────────────────────────── */
+.hover-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.hover-shine:hover::before {
+  transform: translateX(100%);
+}
+
+/* ── Card hover glow ──────────────────────────────── */
+.hover-glow {
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 24px color-mix(in srgb, var(--color-primary) 15%, transparent),
+              0 0 48px color-mix(in srgb, var(--color-secondary) 8%, transparent);
+}
+
+/* ── Focus ring animation ───────────────────────── */
+.input-focus-ring:focus-within {
+  box-shadow: 0 0 0 2px var(--color-bg),
+              0 0 0 4px var(--color-primary);
+  transition: box-shadow 0.2s ease;
+}
+
+/* ── Compare view ──────────────────────────────────── */
+.compare-panel {
+  height: calc(100vh - 280px);
+  min-height: 400px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .text-gradient {
+    animation: none;
+  }
+
+  .glow-pulse-once,
+  .code-line-reveal,
+  .animate-fade-in-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .btn-tap:active {
+    animation: none;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
+
+  .hover-scale:hover,
+  .hover-scale-sm:hover {
+    transform: none;
+  }
+
+  .hover-icon-bounce:hover svg,
+  .hover-icon-bounce:hover .icon-wrapper {
+    animation: none;
+  }
+
+  .hover-shine:hover::before {
+    transform: none;
+  }
+
+  .hover-glow:hover {
+    box-shadow: inherit;
+  }
+}
+
+/* ── Mobile responsive ─────────────────────────────── */
+@media (max-width: 640px) {
+  .compare-panel {
+    height: 50vh;
+    min-height: 300px;
+  }
+}
