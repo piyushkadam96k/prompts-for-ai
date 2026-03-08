@@ -63,12 +63,19 @@ body {
   min-height: 100vh;
   background-color: var(--color-bg);
   color: var(--color-text);
+  /* Fallback for browsers not supporting color-mix */
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(129, 140, 248, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 25%);
+  /* Modern color-mix with fallback */
   background-image:
     radial-gradient(circle at 15% 50%, color-mix(in srgb, var(--color-secondary) 8%, transparent), transparent 25%),
     radial-gradient(circle at 85% 30%, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 25%);
   background-attachment: fixed;
   transition: background-color 0.4s ease, color 0.4s ease;
   position: relative;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll on mobile */
 }
 
 body::before {
@@ -76,18 +83,26 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(
-    ellipse 90% 60% at 50% 50%,
-    color-mix(in srgb, var(--color-primary) 5%, transparent),
-    transparent 50%
-  );
+  background: radial-gradient(ellipse 90% 60% at 50% 50%,
+      rgba(56, 189, 248, 0.05),
+      transparent 50%);
+  background: radial-gradient(ellipse 90% 60% at 50% 50%,
+      color-mix(in srgb, var(--color-primary) 5%, transparent),
+      transparent 50%);
   animation: bg-shimmer 12s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes bg-shimmer {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Light mode: warm pearl body */
@@ -311,9 +326,17 @@ body.theme-dark {
 
 /* ── Button tap / press animation ──────────────────── */
 @keyframes tap-scale {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.97); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.97);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .btn-tap:active {
@@ -326,6 +349,7 @@ body.theme-dark {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -365,8 +389,15 @@ body.theme-dark {
 }
 
 @keyframes icon-bounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
 }
 
 /* ── Link underline slide ─────────────────────────── */
@@ -399,14 +430,12 @@ body.theme-dark {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.08) 45%,
-    rgba(255, 255, 255, 0.15) 50%,
-    rgba(255, 255, 255, 0.08) 55%,
-    transparent 60%
-  );
+  background: linear-gradient(105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.08) 55%,
+      transparent 60%);
   transform: translateX(-100%);
   transition: transform 0.6s ease;
   pointer-events: none;
@@ -423,13 +452,13 @@ body.theme-dark {
 
 .hover-glow:hover {
   box-shadow: 0 0 24px color-mix(in srgb, var(--color-primary) 15%, transparent),
-              0 0 48px color-mix(in srgb, var(--color-secondary) 8%, transparent);
+    0 0 48px color-mix(in srgb, var(--color-secondary) 8%, transparent);
 }
 
 /* ── Focus ring animation ───────────────────────── */
 .input-focus-ring:focus-within {
   box-shadow: 0 0 0 2px var(--color-bg),
-              0 0 0 4px var(--color-primary);
+    0 0 0 4px var(--color-primary);
   transition: box-shadow 0.2s ease;
 }
 
@@ -485,9 +514,39 @@ body.theme-dark {
 }
 
 /* ── Mobile responsive ─────────────────────────────── */
+@media (max-width: 1024px) {
+  body {
+    background-attachment: scroll;
+    /* Better performance on mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .max-w-7xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .text-5xl {
+    font-size: 3rem;
+  }
+}
+
 @media (max-width: 640px) {
   .compare-panel {
-    height: 50vh;
+    height: auto;
     min-height: 300px;
+    flex-direction: column;
+  }
+
+  .text-5xl {
+    font-size: 2.5rem;
+  }
+
+  /* Ensure touch targets are large enough */
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
   }
 }

@@ -29,7 +29,7 @@ export default function HeroSection({ totalPrompts, totalTools, totalChars, onSe
       initial={motionEnabled ? { opacity: 0, y: 22 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: motionEnabled ? MOTION_DURATION.slow : 0.2, ease: MOTION_EASE_OUT }}
-      className="text-center py-16 md:py-24 space-y-8"
+      className="text-center py-12 md:py-24 space-y-6 md:space-y-8"
     >
       <Motion.div
         initial={motionEnabled ? { opacity: 0, scale: 0.92 } : false}
@@ -39,14 +39,14 @@ export default function HeroSection({ totalPrompts, totalTools, totalChars, onSe
           delay: motionEnabled ? 0.08 : 0,
           ease: MOTION_EASE_OUT,
         }}
-        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border-neon-blue/30 text-neon-blue text-sm font-medium"
+        className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full glass-panel border-neon-blue/30 text-neon-blue text-xs md:text-sm font-medium"
       >
         <Sparkles size={14} />
-        <span>100% Open Source • Real AI System Prompts</span>
+        <span>100% Open Source • Real AI Prompts</span>
       </Motion.div>
 
       <Motion.h1
-        className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] drop-shadow-2xl"
+        className="text-4xl md:text-7xl font-black tracking-tighter leading-[1.1] md:leading-[0.95] drop-shadow-2xl"
         style={{ fontFamily: 'var(--font-display)' }}
       >
         <span className="block overflow-hidden">
@@ -87,7 +87,7 @@ export default function HeroSection({ totalPrompts, totalTools, totalChars, onSe
           delay: motionEnabled ? 0.45 : 0,
           ease: MOTION_EASE_OUT,
         }}
-        className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}
+        className={`text-base md:text-xl max-w-2xl mx-auto leading-relaxed px-4 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}
       >
         Explore the system prompts powering the most advanced AI systems.
         Understand how they think, reason, and respond.
@@ -102,18 +102,18 @@ export default function HeroSection({ totalPrompts, totalTools, totalChars, onSe
           ease: MOTION_EASE_OUT,
         }}
         onSubmit={handleSubmit}
-        className={`relative max-w-2xl mx-auto input-focus-ring ${theme === 'light' ? 'shadow-2xl shadow-blue-100' : 'shadow-hero-glow'}`}
+        className={`relative max-w-2xl mx-auto input-focus-ring ${theme === 'light' ? 'shadow-2xl shadow-blue-100' : 'shadow-hero-glow'} px-4 sm:px-0`}
       >
-        <div className={`flex items-center rounded-2xl border ${theme === 'light' ? 'bg-white border-gray-200' : 'glass-panel border-neon-blue/30'} p-1.5`}>
-          <div className="pl-4 pr-2">
-            <Search className={`h-5 w-5 ${theme === 'light' ? 'text-gray-400' : 'text-neon-blue'}`} />
+        <div className={`flex items-center rounded-2xl border ${theme === 'light' ? 'bg-white border-gray-200' : 'glass-panel border-neon-blue/30'} p-1 md:p-1.5`}>
+          <div className="pl-3 md:pl-4 pr-1 md:pr-2">
+            <Search className={`h-4 w-4 md:h-5 md:w-5 ${theme === 'light' ? 'text-gray-400' : 'text-neon-blue'}`} />
           </div>
           <input
             type="text"
             value={query}
             onChange={handleChange}
-            placeholder="Search AI tools or system prompts..."
-            className={`flex-1 bg-transparent py-3 px-2 text-base focus:outline-none ${theme === 'light' ? 'text-gray-900 placeholder-gray-400' : 'text-white placeholder-gray-500'}`}
+            placeholder="Search AI tools..."
+            className={`flex-1 bg-transparent py-2.5 md:py-3 px-2 text-sm md:text-base focus:outline-none ${theme === 'light' ? 'text-gray-900 placeholder-gray-400' : 'text-white placeholder-gray-500'}`}
           />
           {query && (
             <button
@@ -122,14 +122,14 @@ export default function HeroSection({ totalPrompts, totalTools, totalChars, onSe
                 setQuery('');
                 onSearch('');
               }}
-              className="px-3 text-gray-400 hover:text-gray-600 text-xl leading-none"
+              className="px-2 text-gray-400 hover:text-gray-600 text-lg leading-none"
             >
-              x
+              ×
             </button>
           )}
           <button
             type="submit"
-            className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all btn-tap ${theme === 'light' ? 'bg-gray-900 text-white hover:bg-gray-700' : 'bg-gradient-to-r from-neon-blue to-neon-purple text-white hover:opacity-90 shadow-neon-glow'}`}
+            className={`px-3 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all btn-tap ${theme === 'light' ? 'bg-gray-900 text-white hover:bg-gray-700' : 'bg-gradient-to-r from-neon-blue to-neon-purple text-white hover:opacity-90 shadow-neon-glow'}`}
           >
             Search
           </button>

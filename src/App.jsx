@@ -208,15 +208,15 @@ function App() {
               </button>
 
               {(view === 'search' || view === 'home') && (
-                <div className={`hidden md:flex flex-1 max-w-sm items-center rounded-xl border gap-2 transition-all duration-500 input-focus-ring ${isCompactHeader ? 'px-2.5 py-1' : 'px-3 py-1.5'} ${theme === 'light' ? 'bg-white border-gray-200 shadow-sm' : 'glass-panel border-dark-border'}`}>
+                <div className={`flex flex-1 max-w-sm items-center rounded-xl border gap-2 transition-all duration-500 input-focus-ring ${isCompactHeader ? 'px-2.5 py-1.5' : 'px-3 py-2'} ${theme === 'light' ? 'bg-white border-gray-200 shadow-sm' : 'glass-panel border-dark-border'} ${searchQuery ? 'flex' : 'hidden md:flex'}`}>
                   <Search size={14} className={theme === 'light' ? 'text-gray-400 flex-shrink-0' : 'text-neon-blue flex-shrink-0'} />
                   <input
                     ref={searchInputRef}
                     type="text"
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    placeholder="Search prompts..."
-                    aria-label="Search AI prompts by tool name or keyword"
+                    placeholder="Search..."
+                    aria-label="Search AI prompts"
                     className={`flex-1 bg-transparent text-sm focus:outline-none min-w-0 ${theme === 'light' ? 'text-gray-900 placeholder-gray-400' : 'text-white placeholder-gray-500'}`}
                   />
                   {searchQuery && (
@@ -224,12 +224,25 @@ function App() {
                       type="button"
                       aria-label="Clear search"
                       onClick={() => handleSearch('')}
-                      className="text-gray-400 hover:text-gray-600 flex-shrink-0 text-lg leading-none"
+                      className="text-gray-400 hover:text-gray-600 flex-shrink-0 text-lg leading-none px-1"
                     >
-                      x
+                      ×
                     </button>
                   )}
                 </div>
+              )}
+
+              {!searchQuery && (view === 'search' || view === 'home') && (
+                <button
+                  onClick={() => {
+                    navigate('search');
+                    setTimeout(() => searchInputRef.current?.focus(), 100);
+                  }}
+                  className="md:hidden p-2 rounded-full glass-panel border-dark-border text-neon-blue"
+                  aria-label="Toggle search"
+                >
+                  <Search size={18} />
+                </button>
               )}
 
               <div className="flex items-center gap-2">

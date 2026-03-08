@@ -106,26 +106,31 @@ export default function Background3D({ theme }) {
   const { scrollYProgress } = useScroll();
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 50]);
 
+  // Only render 3D on desktop/large tablets for performance and visibility
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024;
+
   return (
     <Motion.div
-      className="fixed inset-0 z-0 pointer-events-none opacity-30 mix-blend-screen transition-opacity duration-1000"
+      className="fixed inset-0 z-0 pointer-events-none opacity-30 transition-opacity duration-1000"
       style={{ y: motionEnabled ? parallaxY : 0 }}
     >
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <ambientLight intensity={theme === 'light' ? 1.5 : 0.5} />
-        <directionalLight
-          position={[10, 10, 5]}
-          intensity={1.5}
-          color={theme === 'light' ? '#3b82f6' : theme === 'dark' ? '#6366f1' : '#38bdf8'}
-        />
-        <directionalLight
-          position={[-10, -10, -5]}
-          intensity={1}
-          color={theme === 'light' ? '#ec4899' : theme === 'dark' ? '#f43f5e' : '#2dd4bf'}
-        />
-        <ParticleField theme={theme} />
-        <AnimatedSphere theme={theme} scrollYProgress={scrollYProgress} motionEnabled={motionEnabled} />
-      </Canvas>
+      {isDesktop && (
+        <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
+          <ambientLight intensity={theme === 'light' ? 1.5 : 0.5} />
+          <directionalLight
+            position={[10, 10, 5]}
+            intensity={1.5}
+            color={theme === 'light' ? '#3b82f6' : theme === 'dark' ? '#6366f1' : '#38bdf8'}
+          />
+          <directionalLight
+            position={[-10, -10, -5]}
+            intensity={1}
+            color={theme === 'light' ? '#ec4899' : theme === 'dark' ? '#f43f5e' : '#2dd4bf'}
+          />
+          <ParticleField theme={theme} />
+          <AnimatedSphere theme={theme} scrollYProgress={scrollYProgress} motionEnabled={motionEnabled} />
+        </Canvas>
+      )}
 
       <div
         className={`absolute inset-0 bg-gradient-to-b from-transparent ${theme === 'light' ? 'to-[#f5f4f2]/90' : theme === 'dark' ? 'to-[#0c0f1a]/95' : 'to-[#030305]/95'}`}

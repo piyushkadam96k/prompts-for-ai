@@ -42,8 +42,8 @@ export default function ToolDetailView({ tool, allPrompts, onViewPrompt, onBack,
                 onClick={onBack}
                 aria-label="Back to Explorer"
                 className={`group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02] btn-tap mb-6 ${theme === 'light'
-                        ? 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 shadow-sm'
-                        : 'glass-panel border border-dark-border text-gray-300 hover:text-white hover:border-neon-blue/40'
+                    ? 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 shadow-sm'
+                    : 'glass-panel border border-dark-border text-gray-300 hover:text-white hover:border-neon-blue/40'
                     }`}
             >
                 <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -104,7 +104,7 @@ export default function ToolDetailView({ tool, allPrompts, onViewPrompt, onBack,
 
             {/* Filter bar */}
             {toolPrompts.length > 0 && (
-                <div className={`flex gap-3 mb-6 ${theme === 'light' ? '' : ''}`}>
+                <div className="flex flex-col sm:flex-row gap-3 mb-6">
                     <div className={`relative flex-1 ${theme === 'light'
                         ? 'bg-white border border-gray-200 rounded-xl shadow-sm'
                         : 'glass-panel rounded-xl'
