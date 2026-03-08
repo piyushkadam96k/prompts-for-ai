@@ -23,9 +23,11 @@ export default function ToolCard({ tool, promptCount, onViewPrompts, onCompare, 
     <Motion.div
       ref={cardRef}
       layout
+      initial={motionEnabled ? { opacity: 0, y: 16 } : { opacity: 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
       whileHover={motionEnabled ? { y: -4, scale: 1.02 } : undefined}
       transition={{ duration: motionEnabled ? MOTION_DURATION.fast : 0.2, ease: MOTION_EASE_OUT }}
-      className={`group/card relative rounded-2xl p-5 cursor-pointer group overflow-hidden hover-lift hover-shine hover-glow ${theme === 'light'
+      className={`group/card relative rounded-2xl p-5 cursor-pointer group overflow-hidden hover-lift hover-shine hover-glow backface-hidden transform-gpu ${theme === 'light'
         ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl'
         : 'glass-panel hover:border-opacity-50'
         } ${isCompareSelected ? 'ring-2 ring-neon-purple' : ''} ${didPulse ? 'glow-pulse-once' : ''}`}
@@ -102,7 +104,7 @@ export default function ToolCard({ tool, promptCount, onViewPrompts, onCompare, 
           </button>
         )}
       </div>
-    </Motion.div>
+    </Motion.div >
   );
 }
 

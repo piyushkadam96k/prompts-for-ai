@@ -4,10 +4,12 @@ import { ArrowLeft, Search, ArrowLeftRight } from 'lucide-react';
 import { getPromptsForTool } from '../data/toolsData';
 import ToolIcon from './ToolIcon';
 import PromptCard from './PromptCard';
+import { useMotionPreferences } from '../motion/useMotionPreferences';
 
 export default function ToolDetailView({ tool, allPrompts, onViewPrompt, onBack, onCompare, compareTools, theme, isFavorite, onToggleFavorite }) {
     const [filter, setFilter] = useState('');
     const [sort, setSort] = useState('default');
+    const { motionEnabled } = useMotionPreferences();
 
     const toolPrompts = useMemo(() => getPromptsForTool(tool, allPrompts), [tool, allPrompts]);
 
@@ -32,9 +34,10 @@ export default function ToolDetailView({ tool, allPrompts, onViewPrompt, onBack,
 
     return (
         <Motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={motionEnabled ? { opacity: 0, x: 30 } : { opacity: 1, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
+            exit={motionEnabled ? { opacity: 0, x: -30 } : { opacity: 0 }}
+            className="backface-hidden transform-gpu"
         >
             {/* Back */}
             <button

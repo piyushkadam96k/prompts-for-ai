@@ -158,6 +158,23 @@ body.theme-dark {
   box-shadow: 0 2px 16px rgba(26, 22, 18, 0.06), 0 1px 3px rgba(184, 134, 11, 0.06);
 }
 
+/* Hardware acceleration & Visibility fixes */
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+}
+
+/* Ensure prompt cards are visible as a fallback */
+.prompt-card-visible-fallback {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
 /* ── Text gradient ─────────────────────────────────── */
 .text-gradient {
   background: linear-gradient(135deg, var(--color-neon-blue), var(--color-neon-purple), var(--color-neon-pink));

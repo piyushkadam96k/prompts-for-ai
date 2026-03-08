@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion as Motion } from 'framer-motion';
 import { Copy, Check, Download, Eye, Heart } from 'lucide-react';
+import { useMotionPreferences } from '../motion/useMotionPreferences';
 
 function getWordCount(text) {
     return text.trim().split(/\s+/).filter(Boolean).length;
@@ -15,6 +16,7 @@ function getLengthLabel(chars) {
 
 export default function PromptCard({ prompt, onViewFull, theme, index, isFavorite, onToggleFavorite }) {
     const [copied, setCopied] = useState(false);
+    const { motionEnabled } = useMotionPreferences();
     const favorited = isFavorite ? isFavorite(prompt) : false;
 
     const handleCopy = (e) => {
@@ -46,10 +48,10 @@ export default function PromptCard({ prompt, onViewFull, theme, index, isFavorit
     return (
         <Motion.div
             layout
-            initial={{ opacity: 0, y: 20 }}
+            initial={motionEnabled ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0, transition: { delay: index * 0.04 } }}
-            whileHover={{ y: -2 }}
-            className={`rounded-2xl p-5 group cursor-pointer hover-lift hover-shine ${theme === 'light'
+            whileHover={motionEnabled ? { y: -2 } : undefined}
+            className={`rounded-2xl p-5 group cursor-pointer hover-lift hover-shine backface-hidden transform-gpu flex flex-col h-full ${theme === 'light'
                 ? 'bg-white border border-gray-200 shadow-md hover:shadow-xl'
                 : 'glass-panel hover:border-neon-purple/40'
                 } transition-all duration-300`}
@@ -104,10 +106,10 @@ export default function PromptCard({ prompt, onViewFull, theme, index, isFavorit
                         <button
                             onClick={(e) => { e.stopPropagation(); onToggleFavorite(prompt); }}
                             className={`p-1.5 rounded-lg transition-colors btn-tap ${favorited
-                                    ? 'text-red-400 hover:text-red-500'
-                                    : theme === 'light'
-                                        ? 'hover:bg-gray-100 text-gray-500 hover:text-red-400'
-                                        : 'hover:bg-dark-border text-gray-500 hover:text-red-400'
+                                ? 'text-red-400 hover:text-red-500'
+                                : theme === 'light'
+                                    ? 'hover:bg-gray-100 text-gray-500 hover:text-red-400'
+                                    : 'hover:bg-dark-border text-gray-500 hover:text-red-400'
                                 }`}
                             title={favorited ? 'Remove from favorites' : 'Add to favorites'}
                         >
